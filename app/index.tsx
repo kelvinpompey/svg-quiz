@@ -11,17 +11,15 @@ function Home() {
   const renderCount = useRef(1).current++;
 
   return (
-    <ImageBackground
-      source={require('../assets/background.png')}
-      className="flex flex-1 items-center justify-center gap-6">
+    <View className="flex flex-1 items-center justify-center gap-6 bg-[#0066cc]">
       <Show if={questionStore$.answerState.get() === 'correct'}>
-        <Text className="font-white duration-2000 animate-pulse text-3xl font-bold text-yellow-400">
+        <Text className="font-white animate-pulse text-3xl font-bold text-yellow-400 duration-2000">
           Correct!
         </Text>
       </Show>
 
       <Show if={questionStore$.answerState.get() === 'wrong'}>
-        <Text className="font-white duration-2000 animate-pulse text-3xl font-bold text-red-400">
+        <Text className="font-white animate-pulse text-3xl font-bold text-red-400 duration-2000">
           Try again!
         </Text>
       </Show>
@@ -32,7 +30,7 @@ function Home() {
           onPress={() => questionStore$.nextQuestion()}
           className="w-[200px] hover:animate-pulse"></Button>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 

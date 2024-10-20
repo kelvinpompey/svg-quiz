@@ -8,12 +8,12 @@ export type OptionModel = RecordModel & {
 export type QuestionModel = RecordModel & {
   title: string;
   expand: {
-    options: OptionModel[];
+    options_via_question: OptionModel[];
     correct_option: OptionModel;
   };
 };
 export const fetchQuestions = () => {
   return pb
     .collection('questions')
-    .getList<QuestionModel>(0, 10, { expand: 'options, correct_option' });
+    .getList<QuestionModel>(0, 10, { expand: 'options_via_question, correct_option' });
 };

@@ -15,11 +15,11 @@ export function Question({ question }: QuestionProps) {
           key={question?.id}
           initial={{ opacity: 0.0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}>
-          <View className="max-w-[300px] items-center gap-2">
+          <View className=" max-w-[300px] items-center gap-2">
             <Text className="text-4xl font-bold text-white">{question?.title}</Text>
 
-            <View className="w-[300px] gap-2">
-              {question?.expand.options.map((item) => (
+            <View className="gap-2">
+              {question?.expand.options_via_question.map((item) => (
                 <Text
                   onPress={() => questionStore$.checkAnswer(item.id)}
                   key={item.id}
