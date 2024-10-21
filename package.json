@@ -29,7 +29,7 @@
     "mobx": "^6.13.3",
     "mobx-persist-store": "^1.1.5",
     "mobx-react-lite": "^4.0.7",
-    "nativewind": "4.0.36",
+    "nativewind": "^4.1.18",
     "pocketbase": "0.22.0-rc",
     "react": "18.2.0",
     "react-dom": "18.2.0",
