@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  expo:
+    build: .
+    ports:
+      - '80:80' # Map host port to container port
+    volumes:
+      - ./dist:/app/dist # Mount dist directory if needed
+    environment:
+      - NODE_ENV=production # or development based on your needs
+    #command: ['npx', 'serve', 'dist']
