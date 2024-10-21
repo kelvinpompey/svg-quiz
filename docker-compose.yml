@@ -9,4 +9,4 @@ services:
       - ./dist:/app/dist # Mount dist directory if needed
     environment:
       - NODE_ENV=production # or development based on your needs
-    #command: ['npx', 'serve', 'dist']
+    command: ['npx', 'serve', 'dist']

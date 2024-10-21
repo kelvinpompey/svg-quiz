@@ -23,4 +23,4 @@ RUN npx expo export --output-dir dist
 EXPOSE 80
 
 # Serve the static files using a simple server
-# CMD ["npx", "serve", "dist"]
+CMD ["npx", "serve", "dist"]
