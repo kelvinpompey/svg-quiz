@@ -6,18 +6,16 @@ export const questionStore$ = observable(() => ({
   answerState: 'pending',
   questions: () => services.questions.fetchQuestions(),
   loadingState: () => syncState(questionStore$.questions),
-  currentQuestion: () => questionStore$.questions.items[questionStore$.currentQuestionIndex.get()],
+  currentQuestion: () => questionStore$.questions[questionStore$.currentQuestionIndex.get()],
   checkAnswer: (answer: string) => {
-    if (questionStore$.currentQuestion.expand.correct_option.id.get() === answer) {
+    if (questionStore$.currentQuestion.correctOptionId.get() === answer) {
       questionStore$.answerState.set('correct');
     } else {
       questionStore$.answerState.set('wrong');
     }
   },
   nextQuestion: () => {
-    questionStore$.currentQuestionIndex.set(
-      (prev) => (prev + 1) % questionStore$.questions.totalItems.get()
-    );
+    questionStore$.currentQuestionIndex.set((prev) => (prev + 1) % questionStore$.questions.length);
     questionStore$.answerState.set('pending');
   },
 }));

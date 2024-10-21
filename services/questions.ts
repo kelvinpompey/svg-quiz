@@ -1,19 +1,29 @@
-import { RecordModel } from 'pocketbase';
-import { pb } from '~/lib/pb';
+import * as config from '../config';
 
-export type OptionModel = RecordModel & {
+export type QuestionModel = {
+  id: string;
+  createdAt: Date | null;
   title: string;
+  updatedAt: Date | null;
+  correctOptionId: string | null;
+  options: {
+    id: string;
+    createdAt: Date | null;
+    title: string;
+    updatedAt: Date | null;
+    questionId: string | null;
+  }[];
 };
 
-export type QuestionModel = RecordModel & {
-  title: string;
-  expand: {
-    options_via_question: OptionModel[];
-    correct_option: OptionModel;
-  };
-};
-export const fetchQuestions = () => {
-  return pb
-    .collection('questions')
-    .getList<QuestionModel>(0, 10, { expand: 'options_via_question, correct_option' });
+export type GetQuestionsWithOptionsResponse = QuestionModel[];
+
+export const fetchQuestions = async (): Promise<GetQuestionsWithOptionsResponse> => {
+  const response = await fetch(`${config.API_URL}/api/questions`);
+
+  if (!response.ok) {
+    throw new Error(`Error fetching questions: ${response.statusText}`);
+  }
+
+  const data: GetQuestionsWithOptionsResponse = await response.json();
+  return data;
 };
