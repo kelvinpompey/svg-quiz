@@ -9,7 +9,8 @@
     "prebuild": "expo prebuild",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build": "npx expo export"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
@@ -28,7 +29,7 @@
     "mobx": "^6.13.3",
     "mobx-persist-store": "^1.1.5",
     "mobx-react-lite": "^4.0.7",
-    "nativewind": "4.0.36",
+    "nativewind": "^4.1.19",
     "pocketbase": "0.22.0-rc",
     "react": "18.2.0",
     "react-dom": "18.2.0",
