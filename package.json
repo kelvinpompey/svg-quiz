@@ -68,6 +68,5 @@
       ]
     }
   },
-  "private": true,
-  "packageManager": "yarn@3.6.3"
+  "private": true
 }
