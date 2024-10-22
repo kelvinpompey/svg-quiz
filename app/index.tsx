@@ -6,6 +6,7 @@ import { Button } from '~/components/Button';
 import { useRef } from 'react';
 import { questionStore$ } from '~/store/question';
 import { Question } from '~/components/Question';
+import { authClient } from '~/lib/auth';
 
 function Home() {
   const renderCount = useRef(1).current++;
@@ -29,6 +30,12 @@ function Home() {
           title="Next"
           onPress={() => questionStore$.nextQuestion()}
           className="w-[200px] hover:animate-pulse"></Button>
+
+        <Button
+          title="Login"
+          onPress={() => {
+            authClient.signIn.email({ email: 'kelvin.pompey@gmail.com', password: '12345678' });
+          }}></Button>
       </View>
     </View>
   );

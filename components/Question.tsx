@@ -18,7 +18,7 @@ export function Question({ question }: QuestionProps) {
           <View className=" max-w-[300px] gap-2">
             <Text className="text-4xl font-bold text-white">{question?.title}</Text>
 
-            <View className="flex w-[300px] flex-1 justify-start gap-2">
+            <View className="flex w-[300px] justify-start gap-2">
               {question?.options.map((item) => (
                 <Text
                   onPress={() => questionStore$.checkAnswer(item.id)}
