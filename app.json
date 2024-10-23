@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "svg-quiz",
-    "slug": "svg-quiz",
+    "name": "svgquiz",
+    "slug": "svgquiz",
     "version": "1.0.0",
     "scheme": "svg-quiz",
     "web": {
@@ -54,7 +54,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "f67bd684-eb4b-4be3-8bc8-e7f4c42d720b"
+        "projectId": "6303432a-624e-4190-ab34-8d6f472f52d3"
       }
     },
     "owner": "silkodyssey",
