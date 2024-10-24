@@ -1,3 +1,3 @@
 import * as questions from './questions';
-
-export { questions };
+import * as auth from './auth';
+export { questions, auth };

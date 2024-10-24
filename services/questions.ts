@@ -15,5 +15,5 @@ export type QuestionModel = RecordModel & {
 export const fetchQuestions = () => {
   return pb
     .collection('questions')
-    .getList<QuestionModel>(0, 10, { expand: 'options_via_question, correct_option' });
+    .getList<QuestionModel>(0, 1000, { expand: 'options_via_question, correct_option' });
 };

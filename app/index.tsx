@@ -1,43 +1,58 @@
-import { Text, View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 
-import { observer, Show } from '@legendapp/state/react';
+import { observer, Reactive, Show, Switch } from '@legendapp/state/react';
 
-import { Button } from '~/components/Button';
-import { useRef } from 'react';
-import { questionStore$ } from '~/store/question';
+import { useEffect, useRef } from 'react';
 import { Question } from '~/components/Question';
-import { pb } from '~/lib/pb';
+import { useStore } from '~/store';
+import { Header } from '~/components/Header';
+
+import { Button } from '~/components/ui/button';
+import { Text } from '~/components/ui/text';
 
 function Home() {
   const renderCount = useRef(1).current++;
 
-  const handleLogin = () => {
-    pb.collection('users').requestOTP('kelvin.pompey@gmail.com').then(console.log);
-  };
+  const { questionStore$, authStore$, timerStore$ } = useStore();
 
   return (
-    <View className="flex flex-1 items-center justify-center gap-6 bg-[#0066cc]">
-      <Button title="Login" onPress={handleLogin}></Button>
-
-      <Show if={questionStore$.answerState.get() === 'correct'}>
-        <Text className="font-white animate-pulse text-3xl font-bold text-yellow-400 duration-2000">
-          Correct!
+    <SafeAreaView className=" relative flex flex-1 bg-[#0066cc]">
+      <Header />
+      <View className=" flex flex-1 items-center justify-center gap-6">
+        <Text className="absolute top-0 text-center text-xl font-bold text-white">
+          Time: {timerStore$.count.get()}
         </Text>
-      </Show>
 
-      <Show if={questionStore$.answerState.get() === 'wrong'}>
-        <Text className="font-white animate-pulse text-3xl font-bold text-red-400 duration-2000">
-          Try again!
-        </Text>
-      </Show>
-      <Question question={questionStore$.currentQuestion.get()} />
-      <View>
-        <Button
-          title="Next"
-          onPress={() => questionStore$.nextQuestion()}
-          className="w-[200px] hover:animate-pulse"></Button>
+        <Switch value={questionStore$.answerState}>
+          {{
+            correct: () => (
+              <Text className="font-white animate-pulse text-3xl font-bold text-yellow-400 duration-2000">
+                Correct!
+              </Text>
+            ),
+            wrong: () => (
+              <Text className="font-white animate-pulse text-3xl font-bold text-red-400 duration-2000">
+                Try again!
+              </Text>
+            ),
+            default: () => (
+              <Text className="font-white animate-pulse text-3xl font-bold text-red-400 duration-2000">
+                {' '}
+              </Text>
+            ),
+          }}
+        </Switch>
+
+        <Question question={questionStore$.currentQuestion.get()} />
+        <View className="gap-2">
+          <Button
+            onPress={() => timerStore$.flip()}
+            className="w-[200px] bg-[#009933] hover:animate-pulse">
+            <Text className="font-bold">Start</Text>
+          </Button>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

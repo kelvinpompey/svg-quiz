@@ -5,7 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 
 import PocketBase from 'pocketbase';
 
-(global as any).pb = new PocketBase('http://192.168.0.4:8090');
+import { StoreProvider } from '~/store';
+import EventSource from 'react-native-sse';
+import * as config from '../config';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+(global as any).EventSource = EventSource;
+(global as any).pb = new PocketBase(config.API_URL);
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -14,12 +20,15 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   return (
-    <>
-      <StatusBar hidden={false} translucent={true} backgroundColor="transparent" />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </>
+    <StoreProvider>
+      <SafeAreaProvider>
+        <StatusBar hidden={false} translucent={true} backgroundColor="transparent" />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="login" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+      </SafeAreaProvider>
+    </StoreProvider>
   );
 }
