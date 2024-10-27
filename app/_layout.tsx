@@ -9,9 +9,12 @@ import { StoreProvider } from '~/store';
 import EventSource from 'react-native-sse';
 import * as config from '../config';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
 
 (global as any).EventSource = EventSource;
 (global as any).pb = new PocketBase(config.API_URL);
+
+import { initialiseOtaManager } from 'expo-ota-manager';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -19,6 +22,8 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  useEffect(() => initialiseOtaManager({}), []);
+
   return (
     <StoreProvider>
       <SafeAreaProvider>

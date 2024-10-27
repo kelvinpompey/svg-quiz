@@ -35,9 +35,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.safyah.svgquiz"
@@ -59,7 +57,7 @@
     },
     "owner": "silkodyssey",
     "runtimeVersion": {
-      "policy": "appVersion"
+      "policy": "nativeVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/6303432a-624e-4190-ab34-8d6f472f52d3"
