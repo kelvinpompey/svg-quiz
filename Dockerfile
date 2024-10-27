@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Copy the PocketBase executable and pb_data folder from the builder stage
 COPY --from=builder /app/pocketbase .
-COPY --from=builder /app/pb_data ./pb_data
+#COPY --from=builder /app/pb_data ./pb_data
 
 # Expose the desired port
 EXPOSE 8080
