@@ -2,11 +2,12 @@ import { Text, View } from 'react-native';
 import { QuestionModel } from '~/services/questions';
 import { AnimatePresence, Motion } from '@legendapp/motion';
 import { questionStore$ } from '~/store/question';
+import { observer, Switch } from '@legendapp/state/react';
 
 type QuestionProps = {
   question: QuestionModel;
 };
-export function Question({ question }: QuestionProps) {
+export const Question = observer(({ question }: QuestionProps) => {
   return (
     <AnimatePresence>
       {Boolean(question?.id) ? (
@@ -16,6 +17,25 @@ export function Question({ question }: QuestionProps) {
           initial={{ opacity: 0.0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}>
           <View className="w-[300px] gap-2">
+            <Switch value={questionStore$.answerState}>
+              {{
+                correct: () => (
+                  <Text className="font-white duration-2000 animate-pulse text-center text-3xl font-bold text-yellow-400">
+                    Correct!
+                  </Text>
+                ),
+                wrong: () => (
+                  <Text className="font-white duration-2000 animate-pulse text-center text-3xl font-bold text-red-400">
+                    Try again!
+                  </Text>
+                ),
+                default: () => (
+                  <Text className="font-white duration-2000 animate-pulse text-center text-3xl font-bold text-red-400">
+                    {' '}
+                  </Text>
+                ),
+              }}
+            </Switch>
             <Text className="text-4xl font-bold text-white">{question?.title}</Text>
 
             <View className="gap-2">
@@ -33,4 +53,4 @@ export function Question({ question }: QuestionProps) {
       ) : null}
     </AnimatePresence>
   );
-}
+});

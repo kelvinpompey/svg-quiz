@@ -10,6 +10,7 @@ import { Header } from '~/components/Header';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import Constants from 'expo-constants';
+import { GameOver } from '~/components/GameOver';
 
 function Home() {
   const renderCount = useRef(1).current++;
@@ -26,33 +27,20 @@ function Home() {
           Time: {timerStore$.count.get()}
         </Text>
 
-        <Switch value={questionStore$.answerState}>
-          {{
-            correct: () => (
-              <Text className="font-white animate-pulse text-3xl font-bold text-yellow-400 duration-2000">
-                Correct!
-              </Text>
-            ),
-            wrong: () => (
-              <Text className="font-white animate-pulse text-3xl font-bold text-red-400 duration-2000">
-                Try again!
-              </Text>
-            ),
-            default: () => (
-              <Text className="font-white animate-pulse text-3xl font-bold text-red-400 duration-2000">
-                {' '}
-              </Text>
-            ),
-          }}
-        </Switch>
+        <Show
+          if={questionStore$.quizState.get() === 'finished'}
+          else={() => <Question question={questionStore$.currentQuestion.get()} />}>
+          <GameOver />
+        </Show>
 
-        <Question question={questionStore$.currentQuestion.get()} />
         <View className="gap-2">
-          <Button
-            onPress={() => timerStore$.flip()}
-            className="w-[200px] bg-[#009933] hover:animate-pulse">
-            <Text className="font-bold">Start</Text>
-          </Button>
+          <Show if={questionStore$.quizState.get() !== 'started'}>
+            <Button
+              onPress={() => questionStore$.shuffle()}
+              className="w-[200px] bg-[#009933] hover:animate-pulse">
+              <Text className="font-bold">Start</Text>
+            </Button>
+          </Show>
         </View>
         <Text className="text-white">
           Version {Constants.manifest2?.extra?.expoClient?.version}

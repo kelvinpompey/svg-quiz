@@ -12,8 +12,11 @@ export type QuestionModel = RecordModel & {
     correct_option: OptionModel;
   };
 };
-export const fetchQuestions = () => {
-  return pb
-    .collection('random_questions')
+export const fetchQuestions = async () => {
+  let result = await pb
+    .collection('questions')
     .getList<QuestionModel>(0, 1000, { expand: 'options_via_question, correct_option' });
+  console.log('result ', result);
+
+  return result.items;
 };
