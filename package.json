@@ -82,6 +82,5 @@
       ]
     }
   },
-  "private": true,
-  "packageManager": "bun@1.2.29"
+  "private": true
 }
