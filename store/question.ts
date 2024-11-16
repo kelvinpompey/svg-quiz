@@ -12,6 +12,7 @@ interface QuestionStore {
   quizState: 'pending' | 'started' | 'finished';
   shuffledQuestions: QuestionModel[];
   questions: QuestionModel[];
+  subjectId: string;
   loadingState: () => ObservableSyncState;
   currentQuestion: () => QuestionModel;
   checkAnswer: (answer: string) => void;
@@ -23,13 +24,17 @@ export const questionStore$ = observable<QuestionStore>(() => ({
   currentQuestionIndex: 0,
   answerState: 'pending',
   quizState: 'pending',
+  subjectId: '',
   shuffledQuestions: [],
   questions: () =>
     synced({
       get() {
-        return services.questions.fetchQuestions();
+        return services.questions.fetchQuestions({ subjectId: questionStore$.subjectId.get() });
       },
-      persist: { name: 'questions', plugin: ObservablePersistMMKV },
+      persist: {
+        name: `questions`,
+        plugin: ObservablePersistMMKV,
+      },
     }),
   loadingState: () => syncState(questionStore$.questions),
   currentQuestion: () =>

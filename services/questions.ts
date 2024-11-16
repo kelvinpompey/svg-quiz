@@ -12,10 +12,13 @@ export type QuestionModel = RecordModel & {
     correct_option: OptionModel;
   };
 };
-export const fetchQuestions = async () => {
+export const fetchQuestions = async ({ subjectId }: { subjectId: string }) => {
   let result = await pb
     .collection('questions')
-    .getList<QuestionModel>(0, 1000, { expand: 'options_via_question, correct_option' });
+    .getList<QuestionModel>(0, 1000, {
+      expand: 'options_via_question, correct_option',
+      filter: pb.filter('subject = {:subjectId}', { subjectId }),
+    });
   console.log('result ', result);
 
   return result.items;
