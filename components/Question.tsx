@@ -16,7 +16,7 @@ export const Question = observer(({ question }: QuestionProps) => {
           key={question?.id}
           initial={{ opacity: 0.0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}>
-          <View className="w-[300px] gap-2">
+          <View className="w-[300px] gap-2 md:w-[400px]">
             <Switch value={questionStore$.answerState}>
               {{
                 correct: () => (

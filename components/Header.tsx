@@ -5,18 +5,27 @@ import { observer, Show } from '@legendapp/state/react';
 import { Link, useRouter } from 'expo-router';
 
 import { Text } from './ui/text';
+import { Button } from './ui/button';
+import { ChevronLeft, SkipBack } from 'lucide-react-native';
 
 export const Header = observer(() => {
   const { authStore$, timerStore$ } = useStore();
 
   let user = authStore$.user.get();
   const router = useRouter();
-
   return (
     <View className=" flex flex-row items-center justify-between p-2 px-4">
-      <Link href="/">
-        <Text className="text-3xl font-bold text-yellow-500">SVG Quiz</Text>
-      </Link>
+      <Show
+        if={router.canGoBack()}
+        else={() => (
+          <Link href="/">
+            <Text className="text-3xl font-bold text-yellow-500">Exam Prep</Text>
+          </Link>
+        )}>
+        <Button onPress={() => router.back()} className="bg-transparent">
+          <ChevronLeft color={'white'} />
+        </Button>
+      </Show>
 
       <Show
         if={user?.avatarURL}

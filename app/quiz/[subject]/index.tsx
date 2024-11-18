@@ -1,8 +1,8 @@
 import { View, SafeAreaView } from 'react-native';
 
-import { observer, Reactive, Show, Switch } from '@legendapp/state/react';
+import { observer, Show } from '@legendapp/state/react';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Question } from '~/components/Question';
 import { useStore } from '~/store';
 import { Header } from '~/components/Header';
@@ -14,16 +14,19 @@ import { GameOver } from '~/components/GameOver';
 import { useLocalSearchParams } from 'expo-router';
 
 function Quiz() {
-  const renderCount = useRef(1).current++;
-  const params = useLocalSearchParams<{ subject: string }>();
-
-  console.log('constants ', Constants.manifest2?.runtimeVersion);
+  const params = useLocalSearchParams<{ subject: string; name: string }>();
 
   useEffect(() => {
+    console.log('fetching questions for subject ', params.name);
     questionStore$.subjectId.set(params.subject);
+
+    // Start fetching the questions so they're available when
+    // start is pressed
+    questionStore$.questions.get();
+    questionStore$.reset();
   }, []);
 
-  const { questionStore$, authStore$, timerStore$ } = useStore();
+  const { questionStore$, timerStore$ } = useStore();
 
   return (
     <SafeAreaView className="relative flex flex-1 bg-[#0066cc]">
@@ -39,13 +42,20 @@ function Quiz() {
           <GameOver />
         </Show>
 
-        <View className="gap-2">
+        <View className="flex items-center gap-2">
           <Show if={questionStore$.quizState.get() !== 'started'}>
-            <Button
-              onPress={() => questionStore$.shuffle()}
-              className="w-[200px] bg-[#009933] hover:animate-pulse">
-              <Text className="font-bold">Start</Text>
-            </Button>
+            <Text className="text-center text-3xl font-bold text-yellow-500">{params.name}</Text>
+            <Text className="text-center text-white">Tap start to begin!</Text>
+
+            <Show
+              if={questionStore$.loadingState.isLoaded.get()}
+              else={() => <Text className="text-white">Loading...</Text>}>
+              <Button
+                onPress={() => questionStore$.shuffle()}
+                className="w-[200px] bg-[#009933] hover:animate-pulse">
+                <Text className="font-bold">Start</Text>
+              </Button>
+            </Show>
           </Show>
         </View>
         <Text className="text-white">

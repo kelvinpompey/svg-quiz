@@ -10,12 +10,10 @@ import { Header } from '~/components/Header';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import Constants from 'expo-constants';
-import { GameOver } from '~/components/GameOver';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 function Home() {
-  const renderCount = useRef(1).current++;
-
+  const router = useRouter();
   console.log('constants ', Constants.manifest2?.runtimeVersion);
 
   const { questionStore$, authStore$, timerStore$ } = useStore();
@@ -23,23 +21,30 @@ function Home() {
   return (
     <SafeAreaView className="relative flex flex-1 bg-[#0066cc]">
       <Header />
-      <View className="flex flex-1 items-center justify-center gap-6">
-        <Button className="bg-[#009933]">
-          <Link href="/subjects/cpea">
-            <Text>CPEA</Text>
-          </Link>
-        </Button>
+      <View className="flex flex-1 items-center gap-6">
+        <Text className="w-[300px] text-center text-2xl font-bold text-white">
+          The purpose of this app is to help students prepare for Caribbean exit examinations with
+          short quizzes!
+        </Text>
 
-        <Button className="bg-[#009933]">
-          <Link href="/subjects/csec">
+        <Text className="w-[300px] text-center text-xl text-white">
+          To start select the examination level
+        </Text>
+
+        <View className="grid w-[300px] grid-cols-3 gap-2">
+          <Button className="bg-[#009933]" onPress={() => router.push('/subjects/cpea')}>
+            <Text>CPEA</Text>
+          </Button>
+
+          <Button className="bg-[#009933]" onPress={() => router.push('/subjects/csec')}>
             <Text>CSEC</Text>
-          </Link>
-        </Button>
-        <Button className="bg-[#009933]">
-          <Link href="/subjects/cape">
+          </Button>
+
+          <Button className="bg-[#009933]" onPress={() => router.push('/subjects/cape')}>
             <Text>CAPE</Text>
-          </Link>
-        </Button>
+          </Button>
+        </View>
+
         <Text className="text-white">
           Version {Constants.manifest2?.extra?.expoClient?.version}
         </Text>

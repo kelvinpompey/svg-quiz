@@ -7,7 +7,7 @@ export const GameOver = observer(() => {
   const { timerStore$ } = useStore();
   return (
     <View className="p-2">
-      <Text className="text-white">Game completed in {timerStore$.count.get()} seconds</Text>
+      <Text className="text-white">Quiz completed in {timerStore$.count.get()} seconds</Text>
     </View>
   );
 });

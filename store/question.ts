@@ -11,12 +11,14 @@ interface QuestionStore {
   answerState: 'pending' | 'correct' | 'wrong';
   quizState: 'pending' | 'started' | 'finished';
   shuffledQuestions: QuestionModel[];
-  questions: QuestionModel[];
+  questions: Record<string, QuestionModel[]>;
   subjectId: string;
   loadingState: () => ObservableSyncState;
   currentQuestion: () => QuestionModel;
+  questionsBySubject: (subject: string) => QuestionModel[];
   checkAnswer: (answer: string) => void;
   shuffle: () => void;
+  reset: () => void;
   nextQuestion: () => void;
 }
 
@@ -26,10 +28,16 @@ export const questionStore$ = observable<QuestionStore>(() => ({
   quizState: 'pending',
   subjectId: '',
   shuffledQuestions: [],
+  questionsBySubject: (subject: string) => questionStore$.questions[subject].get(),
   questions: () =>
     synced({
-      get() {
-        return services.questions.fetchQuestions({ subjectId: questionStore$.subjectId.get() });
+      mode: 'assign',
+      async get() {
+        let result = await services.questions.fetchQuestions({
+          subjectId: questionStore$.subjectId.get(),
+        });
+
+        return { [questionStore$.subjectId.get()]: result };
       },
       persist: {
         name: `questions`,
@@ -59,10 +67,24 @@ export const questionStore$ = observable<QuestionStore>(() => ({
     timerStore$.count.set(0);
     questionStore$.currentQuestionIndex.set(0);
     timerStore$.start();
-    let questions = questionStore$.questions.get();
-    let result = shuffle(questionStore$.questions.get()).slice(0, 10);
-    console.log('shuffle ', result);
-    questionStore$.shuffledQuestions.set(() => result);
+    let questions = questionStore$.questionsBySubject(questionStore$.subjectId.get());
+
+    console.log('shuffle questions ', questions);
+
+    if (questions) {
+      let result = shuffle(questions).slice(0, 10);
+      //console.log('shuffle ', result);
+      questionStore$.shuffledQuestions.set(() => result);
+    }
+  },
+
+  reset: () => {
+    timerStore$.count.set(0);
+    timerStore$.stop();
+    questionStore$.currentQuestionIndex.set(0);
+    questionStore$.currentQuestion.set(undefined as any);
+    questionStore$.quizState.set('pending');
+    questionStore$.answerState.set('pending');
   },
   nextQuestion: () => {
     questionStore$.currentQuestionIndex.set(
