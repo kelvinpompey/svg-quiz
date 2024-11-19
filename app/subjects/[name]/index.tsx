@@ -26,7 +26,7 @@ function Subjects() {
   }, []);
 
   return (
-    <SafeAreaView className="relative flex flex-1 dark:bg-gray-900">
+    <SafeAreaView className="relative flex flex-1 pt-8 dark:bg-gray-900">
       <Header />
       <View className="flex flex-1 items-center justify-center gap-6">
         <Text className="font-bold">{params.name.toUpperCase()}</Text>
@@ -34,16 +34,16 @@ function Subjects() {
           The number indictes the number of unique questions available. This will increase over time
         </Text>
         <ScrollView>
-          <View className="grid grid-cols-3 gap-2 p-4">
+          <View className="grid grid-cols-3 gap-2 rounded-md bg-gray-200 p-4 dark:bg-gray-800">
             {subjectStore$.subjectsByLevel(level)?.map((item) => (
               <Pressable
                 key={item.id}
                 className="min-w-full flex-row justify-between rounded-md p-2"
                 onPress={() => router.push(`/quiz/${item.id}?name=${item.name}` as Href)}>
-                <Text className="w-[200px] flex-1 flex-wrap">{item.name}</Text>
+                <Text className=" w-[200px] flex-1 flex-wrap text-xl">{item.name}</Text>
                 <View>
                   <Badge className="bg-yellow-500">
-                    <Text className="text-white">{item.question_count}</Text>
+                    <Text className="text-xl text-white">{item.question_count}</Text>
                   </Badge>
                 </View>
               </Pressable>

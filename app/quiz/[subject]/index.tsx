@@ -12,6 +12,7 @@ import { Text } from '~/components/ui/text';
 import Constants from 'expo-constants';
 import { GameOver } from '~/components/GameOver';
 import { useLocalSearchParams } from 'expo-router';
+import { Progress } from '~/components/ui/progress';
 
 function Quiz() {
   const params = useLocalSearchParams<{ subject: string; name: string }>();
@@ -29,7 +30,16 @@ function Quiz() {
   const { questionStore$, timerStore$ } = useStore();
 
   return (
-    <SafeAreaView className="relative flex flex-1 dark:bg-gray-900">
+    <SafeAreaView className="relative flex flex-1 pt-8 dark:bg-gray-900">
+      <Progress
+        indicatorClassName="bg-[#cc9900]"
+        value={
+          questionStore$.quizState.get() === 'started'
+            ? (questionStore$.currentQuestionIndex.get() + 1) * 10
+            : 0
+        }
+        className="web:w-[100%]"
+      />
       <Header />
       <View className="flex flex-1 items-center justify-center gap-6">
         <Text className="absolute top-0 text-center text-xl font-bold">

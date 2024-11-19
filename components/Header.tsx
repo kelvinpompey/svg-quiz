@@ -5,13 +5,25 @@ import { observer, Show } from '@legendapp/state/react';
 import { Link, useRouter } from 'expo-router';
 
 import { Text } from './ui/text';
-import { ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft, Moon, Sun, Sunrise } from 'lucide-react-native';
+import { Button } from './ui/button';
+import { useColorScheme } from '~/lib/useColorScheme';
 
 export const Header = observer(() => {
   const { authStore$ } = useStore();
+  const { colorScheme, setColorScheme } = useColorScheme();
 
   let user = authStore$.user.get();
   const router = useRouter();
+
+  const handleSetTheme = () => {
+    if (colorScheme === 'dark') {
+      setColorScheme('light');
+    } else {
+      setColorScheme('dark');
+    }
+  };
+
   return (
     <View className=" flex flex-row items-center justify-between p-2 px-4">
       <Show
@@ -22,11 +34,22 @@ export const Header = observer(() => {
           </Link>
         )}>
         <Pressable onPress={() => router.back()}>
-          <ChevronLeft className="dark:text-white" />
+          <ChevronLeft
+            className="dark:text-white"
+            color={colorScheme === 'dark' ? 'white' : 'black'}
+          />
         </Pressable>
       </Show>
 
-      <Show
+      <Button variant={'ghost'} onPress={handleSetTheme}>
+        {colorScheme === 'dark' ? (
+          <Moon color={'white'} className="text-white" />
+        ) : (
+          <Sun color={'black'} className="text-black" />
+        )}
+      </Button>
+
+      {/*<Show
         if={user?.avatarURL}
         else={() => {
           return (
@@ -43,7 +66,7 @@ export const Header = observer(() => {
             />
           </Pressable>
         </View>
-      </Show>
+      </Show> */}
     </View>
   );
 });

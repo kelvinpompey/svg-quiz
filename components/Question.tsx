@@ -13,11 +13,11 @@ export const Question = observer(({ question }: QuestionProps) => {
     <AnimatePresence>
       {Boolean(question?.id) ? (
         <Motion.View
-          style={{ padding: 24, borderRadius: 12 }}
+          style={{ padding: 24, paddingHorizontal: 8, borderRadius: 12 }}
           key={question?.id}
           initial={{ opacity: 0.0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}>
-          <View className="w-[300px] gap-2 md:w-[400px]">
+          <View className="m-2 gap-2 rounded-md bg-gray-200 p-8 dark:bg-gray-800 md:w-[400px]">
             <Switch value={questionStore$.answerState}>
               {{
                 correct: () => (

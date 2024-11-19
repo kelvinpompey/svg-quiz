@@ -12,6 +12,7 @@ import { Text } from '~/components/ui/text';
 import Constants from 'expo-constants';
 import { Link, useRouter } from 'expo-router';
 import { colorScheme, useColorScheme } from 'nativewind';
+import * as Updates from 'expo-updates';
 
 function Home() {
   const router = useRouter();
@@ -19,34 +20,54 @@ function Home() {
 
   const { questionStore$, authStore$, timerStore$ } = useStore();
 
-  useEffect(() => {}, []);
+  async function onFetchUpdateAsync() {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      // You can also add an alert() to see the error message in case of an error when fetching updates.
+      alert(`Error fetching latest Expo update: ${error}`);
+    }
+  }
 
   return (
-    <SafeAreaView className="relative flex flex-1 dark:bg-gray-900">
+    <SafeAreaView className="relative flex flex-1 pt-8 dark:bg-gray-900">
       <Header />
       <View className="flex flex-1 items-center gap-6">
-        <Text className="w-[300px] text-center text-2xl">
-          The purpose of this app is to help students prepare for Caribbean exit examinations with
-          short quizzes!
-        </Text>
+        <View className="gap-8 rounded-md bg-gray-200 p-8 dark:bg-gray-800">
+          <Text className="w-[300px] text-center text-2xl">
+            The purpose of this app is to help students prepare for Caribbean exit examinations with
+            short quizzes!
+          </Text>
 
-        <Text className="w-[300px] text-center text-xl">To start select the examination level</Text>
+          <Text className="w-[300px] text-center text-xl">
+            To start select the examination level
+          </Text>
 
-        <View className="grid w-[300px] grid-cols-3 gap-2">
-          <Button className="" onPress={() => router.push('/subjects/cpea')}>
-            <Text>CPEA</Text>
-          </Button>
+          <View className="grid w-[300px] grid-cols-3 gap-2">
+            <Button className="" onPress={() => router.push('/subjects/cpea')}>
+              <Text>CPEA</Text>
+            </Button>
 
-          <Button className="" onPress={() => router.push('/subjects/csec')}>
-            <Text>CSEC</Text>
-          </Button>
+            <Button className="" onPress={() => router.push('/subjects/csec')}>
+              <Text>CSEC</Text>
+            </Button>
 
-          <Button className="" onPress={() => router.push('/subjects/cape')}>
-            <Text>CAPE</Text>
-          </Button>
+            <Button className="" onPress={() => router.push('/subjects/cape')}>
+              <Text>CAPE</Text>
+            </Button>
+          </View>
         </View>
 
-        <Text>Test Updates</Text>
+        <Button onPress={onFetchUpdateAsync}>
+          <Text>Fetch Update</Text>
+        </Button>
+
+        <Text>Test Updates 5</Text>
         <Text className="">Version {Constants.manifest2?.extra?.expoClient?.version}</Text>
       </View>
     </SafeAreaView>
