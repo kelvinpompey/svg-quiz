@@ -29,10 +29,10 @@ function Quiz() {
   const { questionStore$, timerStore$ } = useStore();
 
   return (
-    <SafeAreaView className="relative flex flex-1 bg-[#0066cc]">
+    <SafeAreaView className="relative flex flex-1 dark:bg-gray-900">
       <Header />
       <View className="flex flex-1 items-center justify-center gap-6">
-        <Text className="absolute top-0 text-center text-xl font-bold text-white">
+        <Text className="absolute top-0 text-center text-xl font-bold">
           Time: {timerStore$.count.get()}
         </Text>
 
@@ -45,22 +45,20 @@ function Quiz() {
         <View className="flex items-center gap-2">
           <Show if={questionStore$.quizState.get() !== 'started'}>
             <Text className="text-center text-3xl font-bold text-yellow-500">{params.name}</Text>
-            <Text className="text-center text-white">Tap start to begin!</Text>
+            <Text className="text-center">Tap start to begin!</Text>
 
             <Show
               if={questionStore$.loadingState.isLoaded.get()}
-              else={() => <Text className="text-white">Loading...</Text>}>
+              else={() => <Text className="">Loading...</Text>}>
               <Button
                 onPress={() => questionStore$.shuffle()}
-                className="w-[200px] bg-[#009933] hover:animate-pulse">
+                className="w-[200px] hover:animate-pulse">
                 <Text className="font-bold">Start</Text>
               </Button>
             </Show>
           </Show>
         </View>
-        <Text className="text-white">
-          Version {Constants.manifest2?.extra?.expoClient?.version}
-        </Text>
+        <Text className="">Version {Constants.manifest2?.extra?.expoClient?.version}</Text>
       </View>
     </SafeAreaView>
   );

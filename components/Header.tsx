@@ -5,11 +5,10 @@ import { observer, Show } from '@legendapp/state/react';
 import { Link, useRouter } from 'expo-router';
 
 import { Text } from './ui/text';
-import { Button } from './ui/button';
-import { ChevronLeft, SkipBack } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 
 export const Header = observer(() => {
-  const { authStore$, timerStore$ } = useStore();
+  const { authStore$ } = useStore();
 
   let user = authStore$.user.get();
   const router = useRouter();
@@ -22,9 +21,9 @@ export const Header = observer(() => {
             <Text className="text-3xl font-bold text-yellow-500">Exam Prep</Text>
           </Link>
         )}>
-        <Button onPress={() => router.back()} className="bg-transparent">
-          <ChevronLeft color={'white'} />
-        </Button>
+        <Pressable onPress={() => router.back()}>
+          <ChevronLeft className="dark:text-white" />
+        </Pressable>
       </Show>
 
       <Show

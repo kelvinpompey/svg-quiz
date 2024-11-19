@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 (global as any).pb = new PocketBase(config.API_URL);
 
 import { initialiseOtaManager } from 'expo-ota-manager';
+import { colorScheme, useColorScheme } from 'nativewind';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -23,6 +24,11 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   useEffect(() => initialiseOtaManager({}), []);
+  const { setColorScheme } = useColorScheme();
+
+  useEffect(() => {
+    setColorScheme('dark');
+  }, []);
 
   return (
     <StoreProvider>

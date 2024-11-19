@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "svgquiz",
-    "slug": "svgquiz",
+    "name": "examprep",
+    "slug": "examprep",
     "version": "1.0.0",
-    "scheme": "svg-quiz",
+    "scheme": "safyah-exam-prep",
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -29,7 +29,7 @@
     },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -38,7 +38,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.safyah.svgquiz"
+      "bundleIdentifier": "com.safyah.examprep"
     },
     "android": {
       "adaptiveIcon": {
@@ -52,15 +52,13 @@
         "origin": false
       },
       "eas": {
-        "projectId": "6303432a-624e-4190-ab34-8d6f472f52d3"
+        "projectId": "17aa9de6-3f8a-4e0c-a3e6-8c7be50b5266"
       }
     },
     "owner": "silkodyssey",
-    "runtimeVersion": {
-      "policy": "nativeVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
-      "url": "https://u.expo.dev/6303432a-624e-4190-ab34-8d6f472f52d3"
+      "url": "https://u.expo.dev/17aa9de6-3f8a-4e0c-a3e6-8c7be50b5266"
     }
   }
 }

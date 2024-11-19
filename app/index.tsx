@@ -11,6 +11,7 @@ import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import Constants from 'expo-constants';
 import { Link, useRouter } from 'expo-router';
+import { colorScheme, useColorScheme } from 'nativewind';
 
 function Home() {
   const router = useRouter();
@@ -18,36 +19,35 @@ function Home() {
 
   const { questionStore$, authStore$, timerStore$ } = useStore();
 
+  useEffect(() => {}, []);
+
   return (
-    <SafeAreaView className="relative flex flex-1 bg-[#0066cc]">
+    <SafeAreaView className="relative flex flex-1 dark:bg-gray-900">
       <Header />
       <View className="flex flex-1 items-center gap-6">
-        <Text className="w-[300px] text-center text-2xl font-bold text-white">
+        <Text className="w-[300px] text-center text-2xl">
           The purpose of this app is to help students prepare for Caribbean exit examinations with
           short quizzes!
         </Text>
 
-        <Text className="w-[300px] text-center text-xl text-white">
-          To start select the examination level
-        </Text>
+        <Text className="w-[300px] text-center text-xl">To start select the examination level</Text>
 
         <View className="grid w-[300px] grid-cols-3 gap-2">
-          <Button className="bg-[#009933]" onPress={() => router.push('/subjects/cpea')}>
+          <Button className="" onPress={() => router.push('/subjects/cpea')}>
             <Text>CPEA</Text>
           </Button>
 
-          <Button className="bg-[#009933]" onPress={() => router.push('/subjects/csec')}>
+          <Button className="" onPress={() => router.push('/subjects/csec')}>
             <Text>CSEC</Text>
           </Button>
 
-          <Button className="bg-[#009933]" onPress={() => router.push('/subjects/cape')}>
+          <Button className="" onPress={() => router.push('/subjects/cape')}>
             <Text>CAPE</Text>
           </Button>
         </View>
 
-        <Text className="text-white">
-          Version {Constants.manifest2?.extra?.expoClient?.version}
-        </Text>
+        <Text>Test Updates</Text>
+        <Text className="">Version {Constants.manifest2?.extra?.expoClient?.version}</Text>
       </View>
     </SafeAreaView>
   );
