@@ -8,6 +8,7 @@ import { Text } from './ui/text';
 import { ChevronLeft, Moon, Sun, Sunrise } from 'lucide-react-native';
 import { Button } from './ui/button';
 import { useColorScheme } from '~/lib/useColorScheme';
+import { LogoHorizontal } from './LogoHorizontal';
 
 export const Header = observer(() => {
   const { authStore$ } = useStore();
@@ -30,7 +31,7 @@ export const Header = observer(() => {
         if={router.canGoBack()}
         else={() => (
           <Link href="/">
-            <Text className="text-3xl font-bold text-yellow-500">Exam Prep</Text>
+            <LogoHorizontal width={200} height={50} />
           </Link>
         )}>
         <Pressable onPress={() => router.back()}>

@@ -19,6 +19,8 @@ export const timerStore$ = observable<Timer>({
       timerStore$.count.set((prev) => prev + 1);
     }, 1000);
 
+    console.log('creating timer with id ', id);
+
     timerStore$.id.set(id);
   },
 
@@ -33,6 +35,7 @@ export const timerStore$ = observable<Timer>({
   stop: () => {
     if (timerStore$.id.get() !== null) {
       clearInterval(timerStore$.id.get() as NodeJS.Timeout);
+      console.log('deleting timer with id ', timerStore$.id.get());
       timerStore$.id.set(undefined);
     }
   },

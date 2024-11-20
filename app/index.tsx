@@ -13,6 +13,7 @@ import Constants from 'expo-constants';
 import { Link, useRouter } from 'expo-router';
 import { colorScheme, useColorScheme } from 'nativewind';
 import * as Updates from 'expo-updates';
+import { Logo } from '~/components/Logo';
 
 function Home() {
   const router = useRouter();
@@ -35,7 +36,7 @@ function Home() {
   }
 
   return (
-    <SafeAreaView className="relative flex flex-1 pt-8 dark:bg-gray-900">
+    <SafeAreaView className="native:pt-8 relative flex flex-1 dark:bg-gray-900">
       <Header />
       <View className="flex flex-1 items-center gap-6">
         <View className="gap-8 rounded-md bg-gray-200 p-8 dark:bg-gray-800">
@@ -49,16 +50,16 @@ function Home() {
           </Text>
 
           <View className="grid w-[300px] grid-cols-3 gap-2">
-            <Button className="" onPress={() => router.push('/subjects/cpea')}>
-              <Text>CPEA</Text>
+            <Button className="bg-[#EAB308]" onPress={() => router.push('/subjects/cpea')}>
+              <Text className="font-bold text-white">CPEA</Text>
             </Button>
 
-            <Button className="" onPress={() => router.push('/subjects/csec')}>
-              <Text>CSEC</Text>
+            <Button className="bg-[#EAB308]" onPress={() => router.push('/subjects/csec')}>
+              <Text className="font-bold text-white">CSEC</Text>
             </Button>
 
-            <Button className="" onPress={() => router.push('/subjects/cape')}>
-              <Text>CAPE</Text>
+            <Button className="bg-[#EAB308]" onPress={() => router.push('/subjects/cape')}>
+              <Text className="font-bold text-white">CAPE</Text>
             </Button>
           </View>
         </View>
