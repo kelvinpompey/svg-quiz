@@ -1,95 +1,98 @@
-import { observable, ObservableSyncState, syncState } from '@legendapp/state';
+import { makeAutoObservable, runInAction } from 'mobx';
 import * as services from '../services';
-import { synced } from '@legendapp/state/sync';
-import { ObservablePersistMMKV } from '@legendapp/state/persist-plugins/mmkv';
 import { shuffle } from '~/lib/utils';
+
 import { QuestionModel } from '~/services/questions';
-import { timerStore$ } from './timer';
+import { RootStore } from './root';
+import { TimerStore } from './timer';
 
-interface QuestionStore {
-  currentQuestionIndex: number;
-  answerState: 'pending' | 'correct' | 'wrong';
-  quizState: 'pending' | 'started' | 'finished';
-  shuffledQuestions: QuestionModel[];
-  questions: Record<string, QuestionModel[]>;
-  subjectId: string;
-  loadingState: () => ObservableSyncState;
-  currentQuestion: () => QuestionModel;
-  questionsBySubject: (subject: string) => QuestionModel[];
-  checkAnswer: (answer: string) => void;
-  shuffle: () => void;
-  reset: () => void;
-  nextQuestion: () => void;
-}
+export class QuestionStore {
+  currentQuestionIndex = 0;
+  answerState: 'pending' | 'correct' | 'wrong' = 'pending';
+  quizState: 'pending' | 'started' | 'finished' = 'pending';
+  subjectId = '';
+  shuffledQuestions: QuestionModel[] = [];
+  questions: Record<string, QuestionModel[]> = {};
+  loadingState: 'idle' | 'loading' | 'error' = 'idle';
+  rootStore: RootStore;
+  timerStore: TimerStore;
 
-export const questionStore$ = observable<QuestionStore>(() => ({
-  currentQuestionIndex: 0,
-  answerState: 'pending',
-  quizState: 'pending',
-  subjectId: '',
-  shuffledQuestions: [],
-  questionsBySubject: (subject: string) => questionStore$.questions[subject].get(),
-  questions: () =>
-    synced({
-      mode: 'assign',
-      async get() {
-        let result = await services.questions.fetchQuestions({
-          subjectId: questionStore$.subjectId.get(),
-        });
+  constructor(rootStore: RootStore) {
+    makeAutoObservable(this);
+    this.rootStore = rootStore;
+    this.timerStore = rootStore.timerStore;
+  }
 
-        return { [questionStore$.subjectId.get()]: result };
-      },
-      persist: {
-        name: `questions`,
-        plugin: ObservablePersistMMKV,
-      },
-    }),
-  loadingState: () => syncState(questionStore$.questions),
-  currentQuestion: () =>
-    questionStore$.shuffledQuestions[questionStore$.currentQuestionIndex.get()],
-  checkAnswer: (answer: string) => {
-    if (questionStore$.currentQuestion.expand.correct_option.id.get() === answer) {
-      questionStore$.answerState.set('correct');
+  get currentQuestion(): QuestionModel | undefined {
+    return this.shuffledQuestions[this.currentQuestionIndex];
+  }
 
-      if (questionStore$.currentQuestionIndex.get() === 9) {
-        questionStore$.quizState.set('finished');
-        timerStore$.stop();
+  setSubjectId = (id: string) => {
+    this.subjectId = id;
+  };
+
+  questionsBySubject(subject: string): QuestionModel[] {
+    return this.questions[subject] || [];
+  }
+
+  async fetchQuestions() {
+    this.loadingState = 'loading';
+    try {
+      const result = await services.questions.fetchQuestions({
+        subjectId: this.subjectId,
+      });
+
+      runInAction(() => {
+        this.questions[this.subjectId] = result;
+        this.loadingState = 'idle';
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loadingState = 'error';
+        console.error('Failed to fetch questions:', error);
+      });
+    }
+  }
+
+  checkAnswer(answer: string) {
+    if (this.currentQuestion?.expand.correct_option.id === answer) {
+      this.answerState = 'correct';
+
+      if (this.currentQuestionIndex === 9) {
+        this.quizState = 'finished';
+        this.timerStore.stop();
         return;
       }
 
-      setTimeout(questionStore$.nextQuestion, 1000);
+      setTimeout(() => this.nextQuestion(), 1000);
     } else {
-      questionStore$.answerState.set('wrong');
+      this.answerState = 'wrong';
     }
-  },
-  shuffle: () => {
-    questionStore$.quizState.set('started');
-    timerStore$.count.set(0);
-    questionStore$.currentQuestionIndex.set(0);
-    timerStore$.start();
-    let questions = questionStore$.questionsBySubject(questionStore$.subjectId.get());
+  }
 
-    console.log('shuffle questions ', questions);
+  shuffle() {
+    this.quizState = 'started';
+    this.timerStore.count = 0;
+    this.currentQuestionIndex = 0;
+    this.timerStore.start();
 
-    if (questions) {
-      let result = shuffle(questions).slice(0, 10);
-      //console.log('shuffle ', result);
-      questionStore$.shuffledQuestions.set(() => result);
+    const questions = this.questionsBySubject(this.subjectId);
+    if (questions?.length) {
+      this.shuffledQuestions = shuffle(questions).slice(0, 10);
     }
-  },
+  }
 
-  reset: () => {
-    timerStore$.count.set(0);
-    timerStore$.stop();
-    questionStore$.currentQuestionIndex.set(0);
-    questionStore$.currentQuestion.set(undefined as any);
-    questionStore$.quizState.set('pending');
-    questionStore$.answerState.set('pending');
-  },
-  nextQuestion: () => {
-    questionStore$.currentQuestionIndex.set(
-      (prev) => (prev + 1) % questionStore$.shuffledQuestions.length
-    );
-    questionStore$.answerState.set('pending');
-  },
-}));
+  reset() {
+    this.timerStore.count = 0;
+    this.timerStore.stop();
+    this.currentQuestionIndex = 0;
+    this.shuffledQuestions = [];
+    this.quizState = 'pending';
+    this.answerState = 'pending';
+  }
+
+  nextQuestion() {
+    this.currentQuestionIndex = (this.currentQuestionIndex + 1) % this.shuffledQuestions.length;
+    this.answerState = 'pending';
+  }
+}

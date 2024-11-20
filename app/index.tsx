@@ -1,6 +1,6 @@
 import { View, SafeAreaView } from 'react-native';
 
-import { observer, Reactive, Show, Switch } from '@legendapp/state/react';
+import { Reactive, Show, Switch } from '@legendapp/state/react';
 
 import { useEffect, useRef } from 'react';
 import { Question } from '~/components/Question';
@@ -14,12 +14,13 @@ import { Link, useRouter } from 'expo-router';
 import { colorScheme, useColorScheme } from 'nativewind';
 import * as Updates from 'expo-updates';
 import { Logo } from '~/components/Logo';
+import { observer } from 'mobx-react-lite';
 
 function Home() {
   const router = useRouter();
   console.log('constants ', Constants.manifest2?.runtimeVersion);
 
-  const { questionStore$, authStore$, timerStore$ } = useStore();
+  const { rootStore } = useStore();
 
   async function onFetchUpdateAsync() {
     try {

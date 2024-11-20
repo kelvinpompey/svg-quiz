@@ -4,10 +4,12 @@ import { useStore } from '~/store';
 import { observer } from '@legendapp/state/react';
 
 export const GameOver = observer(() => {
-  const { timerStore$ } = useStore();
+  const {
+    rootStore: { timerStore },
+  } = useStore();
   return (
     <View className="p-2">
-      <Text className="text-white">Quiz completed in {timerStore$.count.get()} seconds</Text>
+      <Text className="text-white">Quiz completed in {timerStore.count} seconds</Text>
     </View>
   );
 });

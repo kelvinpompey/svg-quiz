@@ -1,7 +1,7 @@
 import { View, Image, Pressable } from 'react-native';
 
 import { useStore } from '~/store';
-import { observer, Show } from '@legendapp/state/react';
+import { Show } from '@legendapp/state/react';
 import { Link, useRouter } from 'expo-router';
 
 import { Text } from './ui/text';
@@ -9,12 +9,13 @@ import { ChevronLeft, Moon, Sun, Sunrise } from 'lucide-react-native';
 import { Button } from './ui/button';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { LogoHorizontal } from './LogoHorizontal';
+import { observer } from 'mobx-react-lite';
 
 export const Header = observer(() => {
-  const { authStore$ } = useStore();
+  const { rootStore } = useStore();
   const { colorScheme, setColorScheme } = useColorScheme();
 
-  let user = authStore$.user.get();
+  //let user = authStore$.user.get();
   const router = useRouter();
 
   const handleSetTheme = () => {

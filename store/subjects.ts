@@ -1,29 +1,42 @@
-import { observable, ObservableSyncState, syncState } from '@legendapp/state';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import * as services from '../services';
-import { synced, syncObservable } from '@legendapp/state/sync';
-import { ObservablePersistMMKV } from '@legendapp/state/persist-plugins/mmkv';
 import { SubjectModel } from '~/services/subjects';
+import { RootStore } from './root';
 
-interface SubjectStore {
-  level: string;
-  subjects: Record<string, SubjectModel[]>;
-  subjectsByLevel: (level: string) => SubjectModel[];
-  loadingState: () => ObservableSyncState;
-}
+export class SubjectStore {
+  subjects: Record<string, SubjectModel[]> = {};
+  loadingState: 'idle' | 'loading' | 'error' = 'idle'; // MobX doesn't have native sync states
+  rootStore: RootStore;
+  selectedSubject: SubjectModel = {};
 
-export const subjectStore$ = observable<SubjectStore>(() => ({
-  level: '',
-  subjects: {},
-  subjectsByLevel: (level: string) => subjectStore$.subjects[level].get(),
-  loadingState: () => syncState(subjectStore$.subjects),
-}));
+  constructor(rootStore: RootStore) {
+    makeAutoObservable(this);
+    this.rootStore = rootStore;
+  }
 
-export const syncSubjects = ({ level }: { level: string }) =>
-  syncObservable(subjectStore$.subjects, {
-    mode: 'assign',
-    async get() {
+  subjectsByLevel(level: string) {
+    return this.subjects[level] || [];
+  }
+
+  setSelectSubject = (subject: SubjectModel) => {
+    this.selectedSubject = subject;
+
+    console.log('this.selectedSubject ', toJS(this.selectedSubject));
+  };
+
+  async syncSubjects({ level }: { level: string }) {
+    this.loadingState = 'loading';
+    try {
       const result = await services.subjects.fetchSubjects({ level });
-      return { [level]: result };
-    },
-    persist: { name: 'subjects', plugin: ObservablePersistMMKV },
-  });
+      runInAction(() => {
+        this.subjects[level] = result;
+        this.loadingState = 'idle';
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loadingState = 'error';
+        console.error('Failed to sync subjects:', error);
+      });
+    }
+  }
+}

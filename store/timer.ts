@@ -1,4 +1,5 @@
-import { observable } from '@legendapp/state';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { RootStore } from './root';
 
 type TimerInterface = {
   start: () => void;
@@ -7,36 +8,45 @@ type TimerInterface = {
 };
 
 type Timer = TimerInterface & {
-  id?: NodeJS.Timeout;
+  id?: NodeJS.Timeout | null;
   count: number;
+  rootStore: RootStore;
 };
 
-export const timerStore$ = observable<Timer>({
-  count: 0,
+export class TimerStore implements Timer {
+  id: NodeJS.Timeout | null = null;
+  count = 0;
+  rootStore: RootStore;
 
-  start: () => {
-    const id = setInterval(() => {
-      timerStore$.count.set((prev) => prev + 1);
+  constructor(rootStore: RootStore) {
+    // Automatically binds actions and makes properties observable
+    makeAutoObservable(this);
+    this.rootStore = rootStore;
+  }
+
+  start() {
+    this.id = setInterval(() => {
+      runInAction(() => {
+        this.count += 1;
+      });
     }, 1000);
 
-    console.log('creating timer with id ', id);
+    console.log('creating timer with id ', this.id);
+  }
 
-    timerStore$.id.set(id);
-  },
-
-  flip: () => {
-    if (timerStore$.id.get()) {
-      timerStore$.stop();
+  flip() {
+    if (this.id) {
+      this.stop();
     } else {
-      timerStore$.start();
+      this.start();
     }
-  },
+  }
 
-  stop: () => {
-    if (timerStore$.id.get() !== null) {
-      clearInterval(timerStore$.id.get() as NodeJS.Timeout);
-      console.log('deleting timer with id ', timerStore$.id.get());
-      timerStore$.id.set(null);
+  stop() {
+    if (this.id) {
+      clearInterval(this.id);
+      console.log('deleting timer with id ', this.id);
+      this.id = null;
     }
-  },
-});
+  }
+}
