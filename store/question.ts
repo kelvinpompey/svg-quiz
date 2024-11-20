@@ -5,6 +5,8 @@ import { shuffle } from '~/lib/utils';
 import { QuestionModel } from '~/services/questions';
 import { RootStore } from './root';
 import { TimerStore } from './timer';
+import { makePersistable } from 'mobx-persist-store';
+import { storageAdapter } from '~/lib/storage';
 
 export class QuestionStore {
   currentQuestionIndex = 0;
@@ -19,6 +21,13 @@ export class QuestionStore {
 
   constructor(rootStore: RootStore) {
     makeAutoObservable(this);
+    console.log('window ', typeof window === 'undefined');
+    typeof window !== 'undefined' &&
+      makePersistable(this, {
+        name: 'QuestionStore',
+        properties: ['questions'],
+        storage: storageAdapter,
+      });
     this.rootStore = rootStore;
     this.timerStore = rootStore.timerStore;
   }

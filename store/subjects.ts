@@ -2,15 +2,26 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import * as services from '../services';
 import { SubjectModel } from '~/services/subjects';
 import { RootStore } from './root';
+import { makePersistable } from 'mobx-persist-store';
+import { storageAdapter } from '~/lib/storage';
 
 export class SubjectStore {
   subjects: Record<string, SubjectModel[]> = {};
   loadingState: 'idle' | 'loading' | 'error' = 'idle'; // MobX doesn't have native sync states
   rootStore: RootStore;
-  selectedSubject: SubjectModel = {};
+  selectedSubject: Partial<SubjectModel> = {};
 
   constructor(rootStore: RootStore) {
     makeAutoObservable(this);
+
+    console.log('window ', typeof window === 'undefined');
+    typeof window !== 'undefined' &&
+      makePersistable(this, {
+        name: 'SubjectStore',
+        properties: ['subjects'],
+        storage: storageAdapter,
+      });
+
     this.rootStore = rootStore;
   }
 
