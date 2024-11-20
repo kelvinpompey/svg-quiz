@@ -36,7 +36,7 @@ export const timerStore$ = observable<Timer>({
     if (timerStore$.id.get() !== null) {
       clearInterval(timerStore$.id.get() as NodeJS.Timeout);
       console.log('deleting timer with id ', timerStore$.id.get());
-      timerStore$.id.set(undefined);
+      timerStore$.id.set(null);
     }
   },
 });
