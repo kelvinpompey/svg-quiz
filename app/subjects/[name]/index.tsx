@@ -28,10 +28,7 @@ function Subjects() {
 
   //const selectedSubject$ = useObservable<SubjectModel>();
 
-  console.log('selected subject ', subjectStore.selectedSubject);
-
   useEffect(() => {
-    console.log(' name ', params.name);
     subjectStore.syncSubjects({ level: params.name.toUpperCase() });
 
     //syncSubjects({ level: params.name.toUpperCase() });
@@ -43,7 +40,6 @@ function Subjects() {
   };
 
   const handleSelectSubject = (item: SubjectModel) => {
-    console.log('handleSelectSubject ', item);
     questionStore.setCurrentSubject(item);
     subjectStore.setSelectSubject(item);
     //selectedSubject$.set(item);
@@ -51,32 +47,28 @@ function Subjects() {
 
   const renderSmall = () => {
     return (
-      <View className="flex flex-1 items-center justify-center gap-6">
+      <View className="flex flex-1 gap-6 p-4">
         <Text className="font-bold">{params.name.toUpperCase()}</Text>
         <Text className="">
           The number indictes the number of unique questions available. This will increase over time
         </Text>
         <ScrollView>
-          <View className="grid grid-cols-3 gap-2 rounded-md bg-gray-200 p-4 dark:bg-gray-800">
+          <View className="flex flex-row flex-wrap gap-2 rounded-md bg-gray-200 p-4 dark:bg-gray-800">
             {subjectStore.subjectsByLevel(level)?.map((item) => (
               <Pressable
                 key={item.id}
                 className="min-w-full flex-row justify-between rounded-md p-2"
                 onPress={() => handleMobileSelection(item)}>
-                <Text className=" w-[200px] flex-1 flex-wrap text-xl">{item.name}</Text>
+                <Text className="flex-1 flex-wrap">{item.name}</Text>
                 <View>
                   <Badge className="bg-yellow-500">
-                    <Text className="text-xl text-white">{item.question_count}</Text>
+                    <Text className="text-white">{item.question_count}</Text>
                   </Badge>
                 </View>
               </Pressable>
             ))}
           </View>
         </ScrollView>
-
-        <Text className="text-white">
-          Version {Constants.manifest2?.extra?.expoClient?.version}
-        </Text>
       </View>
     );
   };
@@ -92,10 +84,10 @@ function Subjects() {
                   key={item.id}
                   className=" flex-row rounded-md p-2"
                   onPress={() => handleSelectSubject(item)}>
-                  <Text className=" w-[200px] flex-wrap text-xl">{item.name}</Text>
+                  <Text className=" text w-[220px] flex-wrap">{item.name}</Text>
                   <View>
                     <Badge className="bg-yellow-500">
-                      <Text className="text-xl text-white">{item.question_count}</Text>
+                      <Text className="text text-white">{item.question_count}</Text>
                     </Badge>
                   </View>
                 </Pressable>

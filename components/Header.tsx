@@ -4,21 +4,18 @@ import { useStore } from '~/store';
 import { Show } from '@legendapp/state/react';
 import { Link, useRouter, useSegments } from 'expo-router';
 
-import { Text } from './ui/text';
-import { ChevronLeft, Moon, Sun, Sunrise } from 'lucide-react-native';
+import { ChevronLeft, Moon, Sun } from 'lucide-react-native';
 import { Button } from './ui/button';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { LogoHorizontal } from './LogoHorizontal';
 import { observer } from 'mobx-react-lite';
-import { canGoBack } from 'expo-router/build/global-state/routing';
+import { Text } from './ui/text';
 
 export const Header = observer(() => {
   const { rootStore } = useStore();
   const { colorScheme, setColorScheme } = useColorScheme();
   const segments = useSegments();
   const currentRoute = `/${segments.join('/')}`;
-
-  console.log('current route ', currentRoute);
 
   //let user = authStore$.user.get();
   const router = useRouter();
@@ -40,11 +37,12 @@ export const Header = observer(() => {
             <LogoHorizontal width={200} height={50} />
           </Link>
         )}>
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={() => router.back()} className="flex-row">
           <ChevronLeft
             className="dark:text-white"
             color={colorScheme === 'dark' ? 'white' : 'black'}
           />
+          <Text>Back</Text>
         </Pressable>
       </Show>
 

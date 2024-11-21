@@ -23,17 +23,12 @@ type QuizProps = {
 
 export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) => {
   useEffect(() => {
-    console.log('fetching questions for subject ', name);
     questionStore.setSubjectId(subject);
 
     // Start fetching the questions so they're available when
     // start is pressed
     questionStore.fetchQuestions();
     questionStore.reset();
-
-    return () => {
-      console.log('unmounting quiz ');
-    };
   }, [subject]);
 
   const {

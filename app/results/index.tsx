@@ -75,7 +75,16 @@ function Results() {
   const dimensions = useWindowDimensions();
   const isSmall = dimensions.width < 900;
 
-  console.log('quiz results2 ', toJS(quizStore.results));
+  if (quizStore.results.length === 0) {
+    return (
+      <SafeAreaView className="native:pt-8 relative flex flex-1 dark:bg-gray-900 ">
+        <Header />
+        <View className="p-4">
+          <Text className="text-center text-xl">You have not done any quizzes as yet!</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const renderSmallQuizItem = ({ item, index }: { item: SubjectModel; index: number }) => (
     <View
@@ -159,7 +168,7 @@ function Results() {
             <View className="rounded-md bg-gray-200 p-2 dark:bg-gray-800">
               <FlatList
                 className="flex"
-                data={quizStore.results}
+                data={quizStore.results as SubjectModel[]}
                 keyExtractor={(item, index) => `quiz-item-${index}`}
                 renderItem={renderSmallQuizItem}
               />

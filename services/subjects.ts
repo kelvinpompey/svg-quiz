@@ -10,7 +10,6 @@ export const fetchSubjects = async ({ level }: { level: string }) => {
   let result = await pb.collection('subjects_totals').getList<SubjectModel>(0, 100, {
     filter: pb.filter('level = {:level}', { level }),
   });
-  console.log('result ', result);
 
   return result.items;
 };

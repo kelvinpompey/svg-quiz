@@ -17,15 +17,12 @@ import { configurePersistable } from 'mobx-persist-store';
 
 import { initialiseOtaManager } from 'expo-ota-manager';
 import { colorScheme, useColorScheme } from 'nativewind';
-import { MMKV } from 'react-native-mmkv';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: 'index',
 };
-
-const storage = new MMKV();
 
 typeof window !== 'undefined' && colorScheme.set('dark');
 

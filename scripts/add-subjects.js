@@ -50,8 +50,6 @@ async function insertSubjects() {
         }),
       }
     );
-
-    console.log('response ', response);
   }
 }
 

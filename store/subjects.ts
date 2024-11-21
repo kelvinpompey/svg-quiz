@@ -39,8 +39,6 @@ export class SubjectStore {
 
   setSelectSubject = (subject: SubjectModel) => {
     this.selectedSubject = subject;
-
-    console.log('this.selectedSubject ', toJS(this.selectedSubject));
   };
 
   async syncSubjects({ level }: { level: string }) {

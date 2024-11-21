@@ -24,7 +24,6 @@ export class QuestionStore {
 
   constructor(rootStore: RootStore) {
     makeAutoObservable(this);
-    console.log('window ', typeof window === 'undefined');
 
     if (Platform.OS === 'web') {
       typeof window !== 'undefined' &&

@@ -30,8 +30,6 @@ export class TimerStore implements Timer {
         this.count += 1;
       });
     }, 1000);
-
-    console.log('creating timer with id ', this.id);
   }
 
   flip() {
@@ -45,7 +43,6 @@ export class TimerStore implements Timer {
   stop() {
     if (this.id) {
       clearInterval(this.id);
-      console.log('deleting timer with id ', this.id);
       this.id = null;
     }
   }

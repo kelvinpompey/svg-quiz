@@ -28,7 +28,6 @@ export async function postOptionsAndQuestion() {
     );
 
     const questionData = await questionResponse.json();
-    console.log('Question posted successfully:', questionData);
 
     // Post each option to the options API and save the returned ID
     for (const option of options) {
