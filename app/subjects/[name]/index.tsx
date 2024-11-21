@@ -53,13 +53,13 @@ function Subjects() {
           The number indictes the number of unique questions available. This will increase over time
         </Text>
         <ScrollView>
-          <View className="flex flex-row flex-wrap gap-2 rounded-md bg-gray-200 p-4 dark:bg-gray-800">
+          <View className="gap-2 rounded-md bg-gray-200 p-4 dark:bg-gray-800">
             {subjectStore.subjectsByLevel(level)?.map((item) => (
               <Pressable
                 key={item.id}
-                className="min-w-full flex-row justify-between rounded-md p-2"
+                className=" flex-row justify-between rounded-md p-2"
                 onPress={() => handleMobileSelection(item)}>
-                <Text className="flex-1 flex-wrap">{item.name}</Text>
+                <Text className="max-w-[250px]">{item.name}</Text>
                 <View>
                   <Badge className="bg-yellow-500">
                     <Text className="text-white">{item.question_count}</Text>
