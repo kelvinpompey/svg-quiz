@@ -18,30 +18,35 @@ import { configurePersistable } from 'mobx-persist-store';
 import { initialiseOtaManager } from 'expo-ota-manager';
 import { colorScheme, useColorScheme } from 'nativewind';
 import { MMKV } from 'react-native-mmkv';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: 'index',
 };
 
-export default function RootLayout() {
-  useEffect(() => initialiseOtaManager({}), []);
-  const { setColorScheme } = useColorScheme();
+const storage = new MMKV();
 
-  useEffect(() => {
-    setColorScheme('dark');
-  }, []);
+typeof window !== 'undefined' && colorScheme.set('dark');
+
+export default function RootLayout() {
+  const { colorScheme } = useColorScheme();
+  useEffect(() => initialiseOtaManager({}), []);
+
+  useEffect(() => {}, []);
 
   return (
     <StoreProvider>
-      <SafeAreaProvider>
-        <StatusBar hidden={false} translucent={true} backgroundColor="transparent" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="login" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack>
-      </SafeAreaProvider>
+      <ThemeProvider value={colorScheme === 'light' ? DefaultTheme : DarkTheme}>
+        <SafeAreaProvider>
+          <StatusBar hidden={false} translucent={true} backgroundColor="transparent" />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="login" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          </Stack>
+        </SafeAreaProvider>
+      </ThemeProvider>
     </StoreProvider>
   );
 }

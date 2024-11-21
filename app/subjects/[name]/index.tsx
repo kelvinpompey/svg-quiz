@@ -20,7 +20,7 @@ function Subjects() {
   const params = useLocalSearchParams<{ name: string }>();
   const level = params.name.toUpperCase();
   const {
-    rootStore: { subjectStore, timerStore },
+    rootStore: { subjectStore, timerStore, questionStore },
   } = useStore();
   const router = useRouter();
   const dimensions = useWindowDimensions();
@@ -37,6 +37,18 @@ function Subjects() {
     //syncSubjects({ level: params.name.toUpperCase() });
   }, []);
 
+  const handleMobileSelection = (item: SubjectModel) => {
+    questionStore.setCurrentSubject(item);
+    router.push(`/quiz/${item.id}?name=${item.name}` as Href);
+  };
+
+  const handleSelectSubject = (item: SubjectModel) => {
+    console.log('handleSelectSubject ', item);
+    questionStore.setCurrentSubject(item);
+    subjectStore.setSelectSubject(item);
+    //selectedSubject$.set(item);
+  };
+
   const renderSmall = () => {
     return (
       <View className="flex flex-1 items-center justify-center gap-6">
@@ -50,7 +62,7 @@ function Subjects() {
               <Pressable
                 key={item.id}
                 className="min-w-full flex-row justify-between rounded-md p-2"
-                onPress={() => router.push(`/quiz/${item.id}?name=${item.name}` as Href)}>
+                onPress={() => handleMobileSelection(item)}>
                 <Text className=" w-[200px] flex-1 flex-wrap text-xl">{item.name}</Text>
                 <View>
                   <Badge className="bg-yellow-500">
@@ -102,12 +114,6 @@ function Subjects() {
         </View>
       </View>
     );
-  };
-
-  const handleSelectSubject = (item: SubjectModel) => {
-    console.log('handleSelectSubject ', item);
-    subjectStore.setSelectSubject(item);
-    //selectedSubject$.set(item);
   };
 
   return (

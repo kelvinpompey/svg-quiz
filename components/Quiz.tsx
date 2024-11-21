@@ -13,6 +13,7 @@ import Constants from 'expo-constants';
 import { GameOver } from '~/components/GameOver';
 import { Progress } from '~/components/ui/progress';
 import { observer } from 'mobx-react-lite';
+import { Loader2 } from 'lucide-react-native';
 
 type QuizProps = {
   name: string;
@@ -65,14 +66,13 @@ export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) =
         </Show>
 
         <View className="flex items-center gap-2">
-          <Text>{questionStore.quizState}</Text>
           <Show if={questionStore.quizState !== 'started'}>
             <Text className="text-center text-3xl font-bold text-yellow-500">{name}</Text>
             <Text className="text-center">Tap start to begin!</Text>
 
             <Show
               if={questionStore.loadingState !== 'loading'}
-              else={() => <Text className="">Loading...</Text>}>
+              else={() => <Loader2 className="animate-spin dark:text-white" />}>
               <Button
                 onPress={() => questionStore.shuffle()}
                 className="w-[200px] hover:animate-pulse">
@@ -81,7 +81,6 @@ export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) =
             </Show>
           </Show>
         </View>
-        <Text className="">Version {Constants.manifest2?.extra?.expoClient?.version}</Text>
       </View>
     </SafeAreaView>
   );

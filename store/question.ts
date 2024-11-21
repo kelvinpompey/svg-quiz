@@ -7,6 +7,8 @@ import { RootStore } from './root';
 import { TimerStore } from './timer';
 import { makePersistable } from 'mobx-persist-store';
 import { storageAdapter } from '~/lib/storage';
+import { SubjectModel } from '~/services/subjects';
+import { Platform } from 'react-native';
 
 export class QuestionStore {
   currentQuestionIndex = 0;
@@ -15,6 +17,7 @@ export class QuestionStore {
   subjectId = '';
   shuffledQuestions: QuestionModel[] = [];
   questions: Record<string, QuestionModel[]> = {};
+  currentSubject: Partial<SubjectModel> = {};
   loadingState: 'idle' | 'loading' | 'error' = 'idle';
   rootStore: RootStore;
   timerStore: TimerStore;
@@ -22,12 +25,21 @@ export class QuestionStore {
   constructor(rootStore: RootStore) {
     makeAutoObservable(this);
     console.log('window ', typeof window === 'undefined');
-    typeof window !== 'undefined' &&
+
+    if (Platform.OS === 'web') {
+      typeof window !== 'undefined' &&
+        makePersistable(this, {
+          name: 'QuestionStore',
+          properties: ['questions'],
+          storage: storageAdapter,
+        });
+    } else {
       makePersistable(this, {
         name: 'QuestionStore',
         properties: ['questions'],
         storage: storageAdapter,
       });
+    }
     this.rootStore = rootStore;
     this.timerStore = rootStore.timerStore;
   }
@@ -43,6 +55,10 @@ export class QuestionStore {
   questionsBySubject(subject: string): QuestionModel[] {
     return this.questions[subject] || [];
   }
+
+  setCurrentSubject = (subject: Partial<SubjectModel>) => {
+    this.currentSubject = subject;
+  };
 
   async fetchQuestions() {
     this.loadingState = 'loading';
@@ -69,6 +85,12 @@ export class QuestionStore {
 
       if (this.currentQuestionIndex === 9) {
         this.quizState = 'finished';
+
+        this.rootStore.quizStore.addResult({
+          time: this.timerStore.count,
+          date: new Date(),
+          subject: this.currentSubject,
+        });
         this.timerStore.stop();
         return;
       }

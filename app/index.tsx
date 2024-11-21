@@ -36,6 +36,10 @@ function Home() {
     }
   }
 
+  const handleViewResults = () => {
+    router.push('/results');
+  };
+
   return (
     <SafeAreaView className="native:pt-8 relative flex flex-1 dark:bg-gray-900">
       <Header />
@@ -65,8 +69,8 @@ function Home() {
           </View>
         </View>
 
-        <Button onPress={onFetchUpdateAsync}>
-          <Text>Fetch Update</Text>
+        <Button onPress={handleViewResults}>
+          <Text>View Quiz Results</Text>
         </Button>
 
         <Text>Test Updates 5</Text>

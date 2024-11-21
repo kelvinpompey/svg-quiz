@@ -4,6 +4,7 @@ import { SubjectModel } from '~/services/subjects';
 import { RootStore } from './root';
 import { makePersistable } from 'mobx-persist-store';
 import { storageAdapter } from '~/lib/storage';
+import { Platform } from 'react-native';
 
 export class SubjectStore {
   subjects: Record<string, SubjectModel[]> = {};
@@ -14,13 +15,20 @@ export class SubjectStore {
   constructor(rootStore: RootStore) {
     makeAutoObservable(this);
 
-    console.log('window ', typeof window === 'undefined');
-    typeof window !== 'undefined' &&
+    if (Platform.OS === 'web') {
+      typeof window !== 'undefined' &&
+        makePersistable(this, {
+          name: 'SubjectStore',
+          properties: ['subjects'],
+          storage: storageAdapter,
+        });
+    } else {
       makePersistable(this, {
         name: 'SubjectStore',
         properties: ['subjects'],
         storage: storageAdapter,
       });
+    }
 
     this.rootStore = rootStore;
   }
