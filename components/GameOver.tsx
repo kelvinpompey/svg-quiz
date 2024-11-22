@@ -7,7 +7,7 @@ import { Button } from './ui/button';
 
 export const GameOver = observer(() => {
   const {
-    rootStore: { timerStore },
+    rootStore: { timerStore, questionStore },
   } = useStore();
 
   const router = useRouter();
@@ -18,7 +18,10 @@ export const GameOver = observer(() => {
 
   return (
     <View className="gap-4 p-2">
-      <Text className="text-2xl text-white">Quiz completed in {timerStore.count} seconds</Text>
+      <Text className="text-2xl text-white">
+        Quiz completed in {timerStore.count} seconds with {questionStore.correctAnswerPercent}%
+        accuracy.
+      </Text>
       <Button onPress={viewQuizResults}>
         <Text>View Quiz Results</Text>
       </Button>

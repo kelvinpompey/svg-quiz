@@ -1,27 +1,26 @@
-import { View, SafeAreaView } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { Show } from '@legendapp/state/react';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Question } from '~/components/Question';
 import { useStore } from '~/store';
-import { Header } from '~/components/Header';
 
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import Constants from 'expo-constants';
+
 import { GameOver } from '~/components/GameOver';
 import { Progress } from '~/components/ui/progress';
 import { observer } from 'mobx-react-lite';
 import { Loader2 } from 'lucide-react-native';
+import { Banner } from './Banner';
 
 type QuizProps = {
   name: string;
   subject: string;
-  showHeader?: boolean;
 };
 
-export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) => {
+export const Quiz = observer(({ name, subject }: QuizProps) => {
   useEffect(() => {
     questionStore.setSubjectId(subject);
 
@@ -36,8 +35,7 @@ export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) =
   } = useStore();
 
   return (
-    <SafeAreaView className="native:pt-8 relative flex flex-1 dark:bg-gray-900">
-      {showHeader && <Header />}
+    <View className="relative flex flex-1 gap-2 dark:bg-gray-900">
       {questionStore.quizState === 'started' ? (
         <Progress
           indicatorClassName="bg-[#cc9900]"
@@ -49,10 +47,8 @@ export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) =
           className="web:w-[100%]"
         />
       ) : null}
-      <View className="flex flex-1 items-center justify-center gap-6">
-        <Text className="absolute top-0 text-center text-xl font-bold">
-          Time: {timerStore.count}
-        </Text>
+      <View className="flex flex-1 items-center gap-6">
+        <Banner />
 
         <Show
           if={questionStore.quizState === 'finished'}
@@ -77,6 +73,6 @@ export const Quiz = observer(({ name, subject, showHeader = true }: QuizProps) =
           </Show>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 });

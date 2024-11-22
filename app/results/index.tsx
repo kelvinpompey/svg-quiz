@@ -86,7 +86,7 @@ function Results() {
     );
   }
 
-  const renderSmallQuizItem = ({ item, index }: { item: SubjectModel; index: number }) => (
+  const renderSmallQuizItem = ({ item, index }: { item: any; index: number }) => (
     <View
       className={cn(
         'flex-1 flex-col px-4 py-1',
@@ -109,12 +109,17 @@ function Results() {
 
       <View className="flex-row">
         <Text className="w-[80px]">Time</Text>
-        <Text className="w-[200px]">{item.time}</Text>
+        <Text className="w-[200px]">{item.time} seconds</Text>
+      </View>
+
+      <View className="flex-row">
+        <Text className="w-[80px]">Accuracy</Text>
+        <Text className="w-[200px]">{item.correctItems}%</Text>
       </View>
     </View>
   );
 
-  const renderLargeQuizItem = ({ item, index }: { item: SubjectModel; index: number }) => (
+  const renderLargeQuizItem = ({ item, index }: { item: any; index: number }) => (
     <View
       className={cn(
         'flex-row px-4 py-1',
@@ -125,7 +130,8 @@ function Results() {
       </Text>
       <Text className="w-[100px]">{item.subject?.level}</Text>
       <Text className="w-[200px]">{item.subject?.name} </Text>
-      <Text className="w-[200px]">{item.time}</Text>
+      <Text className="w-[200px]">{item.time} seconds</Text>
+      <Text className="w-[200px]">{item.correctItems}%</Text>
     </View>
   );
 
@@ -143,6 +149,7 @@ function Results() {
                 <Text className="w-[100px] font-bold">Level</Text>
                 <Text className="w-[200px] font-bold">Subject</Text>
                 <Text className="w-[200px] font-bold">Time</Text>
+                <Text className="w-[200px] font-bold">Accuracy</Text>
               </View>
               <FlatList
                 className="flex"
@@ -162,12 +169,13 @@ function Results() {
       <SafeAreaView className="native:pt-8 relative flex flex-1 dark:bg-gray-900 ">
         <Header />
 
-        <View className="flex-row">
+        <View className="flex-1 flex-row">
           <View className="flex-1 gap-4 p-4">
             <Text className="text-2xl font-bold">Quiz Results</Text>
             <View className="rounded-md bg-gray-200 p-2 dark:bg-gray-800">
               <FlatList
-                className="flex"
+                showsVerticalScrollIndicator={false}
+                className=""
                 data={quizStore.results as SubjectModel[]}
                 keyExtractor={(item, index) => `quiz-item-${index}`}
                 renderItem={renderSmallQuizItem}

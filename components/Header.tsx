@@ -1,8 +1,8 @@
-import { View, Image, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
 
 import { useStore } from '~/store';
 import { Show } from '@legendapp/state/react';
-import { Link, useRouter, useSegments } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 import { ChevronLeft, Moon, Sun } from 'lucide-react-native';
 import { Button } from './ui/button';
@@ -10,12 +10,13 @@ import { useColorScheme } from '~/lib/useColorScheme';
 import { LogoHorizontal } from './LogoHorizontal';
 import { observer } from 'mobx-react-lite';
 import { Text } from './ui/text';
+import { Timer } from './Timer';
+import { useCurrentRoute } from '~/lib/useCurrentRoute';
 
 export const Header = observer(() => {
   const { rootStore } = useStore();
   const { colorScheme, setColorScheme } = useColorScheme();
-  const segments = useSegments();
-  const currentRoute = `/${segments.join('/')}`;
+  const currentRoute = useCurrentRoute();
 
   //let user = authStore$.user.get();
   const router = useRouter();
@@ -45,6 +46,8 @@ export const Header = observer(() => {
           <Text>Back</Text>
         </Pressable>
       </Show>
+
+      <Timer />
 
       <Button variant={'ghost'} onPress={handleSetTheme}>
         {colorScheme === 'dark' ? (

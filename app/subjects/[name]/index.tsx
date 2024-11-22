@@ -1,18 +1,14 @@
 import { View, SafeAreaView, ScrollView, Pressable, useWindowDimensions } from 'react-native';
 
-import { useObservable } from '@legendapp/state/react';
 import { observer } from 'mobx-react-lite';
 
 import { useStore } from '~/store';
 import { Header } from '~/components/Header';
 
 import { Text } from '~/components/ui/text';
-import Constants from 'expo-constants';
 import { Href, useLocalSearchParams, useRouter } from 'expo-router';
-import { Button } from '~/components/ui/button';
 import { useEffect } from 'react';
 import { Badge } from '~/components/ui/badge';
-import { Scroll } from 'lucide-react-native';
 import { Quiz } from '~/components/Quiz';
 import { SubjectModel } from '~/services/subjects';
 
@@ -20,18 +16,14 @@ function Subjects() {
   const params = useLocalSearchParams<{ name: string }>();
   const level = params.name.toUpperCase();
   const {
-    rootStore: { subjectStore, timerStore, questionStore },
+    rootStore: { subjectStore, questionStore },
   } = useStore();
   const router = useRouter();
   const dimensions = useWindowDimensions();
   const isSmall = dimensions.width < 900;
 
-  //const selectedSubject$ = useObservable<SubjectModel>();
-
   useEffect(() => {
     subjectStore.syncSubjects({ level: params.name.toUpperCase() });
-
-    //syncSubjects({ level: params.name.toUpperCase() });
   }, []);
 
   const handleMobileSelection = (item: SubjectModel) => {
@@ -42,7 +34,6 @@ function Subjects() {
   const handleSelectSubject = (item: SubjectModel) => {
     questionStore.setCurrentSubject(item);
     subjectStore.setSelectSubject(item);
-    //selectedSubject$.set(item);
   };
 
   const renderSmall = () => {
@@ -99,7 +90,6 @@ function Subjects() {
               <Quiz
                 name={subjectStore.selectedSubject?.name!}
                 subject={subjectStore.selectedSubject?.id!}
-                showHeader={false}
               />
             )}
           </View>

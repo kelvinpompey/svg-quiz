@@ -12,6 +12,7 @@ import { Platform } from 'react-native';
 
 export class QuestionStore {
   currentQuestionIndex = 0;
+  correctAnswers: boolean[] = [];
   answerState: 'pending' | 'correct' | 'wrong' = 'pending';
   quizState: 'pending' | 'started' | 'finished' = 'pending';
   subjectId = '';
@@ -45,6 +46,11 @@ export class QuestionStore {
 
   get currentQuestion(): QuestionModel | undefined {
     return this.shuffledQuestions[this.currentQuestionIndex];
+  }
+
+  get correctAnswerPercent() {
+    const trueAnswers = this.correctAnswers.filter((item) => item);
+    return (trueAnswers.length / this.correctAnswers.length) * 100;
   }
 
   setSubjectId = (id: string) => {
@@ -82,6 +88,10 @@ export class QuestionStore {
     if (this.currentQuestion?.expand.correct_option.id === answer) {
       this.answerState = 'correct';
 
+      if (this.correctAnswers[this.currentQuestionIndex] === undefined) {
+        this.correctAnswers[this.currentQuestionIndex] = true;
+      }
+
       if (this.currentQuestionIndex === 9) {
         this.quizState = 'finished';
 
@@ -89,6 +99,7 @@ export class QuestionStore {
           time: this.timerStore.count,
           date: new Date(),
           subject: this.currentSubject,
+          correctItems: this.correctAnswerPercent,
         });
         this.timerStore.stop();
         return;
@@ -97,6 +108,9 @@ export class QuestionStore {
       setTimeout(() => this.nextQuestion(), 1000);
     } else {
       this.answerState = 'wrong';
+      if (this.correctAnswers[this.currentQuestionIndex] === undefined) {
+        this.correctAnswers[this.currentQuestionIndex] = false;
+      }
     }
   }
 

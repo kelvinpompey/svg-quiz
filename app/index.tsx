@@ -65,8 +65,7 @@ function Home() {
           <Text>View Quiz Results</Text>
         </Button>
 
-        <Text>Test Updates 5</Text>
-        <Text className="">Version {Constants.manifest2?.extra?.expoClient?.version}</Text>
+        {/*<Text className="">Version {Constants.manifest2?.extra?.expoClient?.version}</Text> */}
       </View>
     </SafeAreaView>
   );
