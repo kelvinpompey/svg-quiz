@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "examprep",
+    "name": "Exam Prep",
     "slug": "examprep",
     "version": "1.0.0",
     "scheme": "safyah-exam-prep",
@@ -78,7 +78,8 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -95,7 +96,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.safyah.examprep"
+      "bundleIdentifier": "com.safyah.examprep",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -1,4 +1,4 @@
-import { Platform, View } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 
 import { Show } from '@legendapp/state/react';
 
@@ -61,12 +61,10 @@ export const Quiz = observer(({ name, subject }: QuizProps) => {
             <Text className="text-center text-3xl font-bold text-yellow-500">{name}</Text>
             <Text className="text-center">Tap start to begin!</Text>
 
-            <Show
-              if={questionStore.loadingState !== 'loading'}
-              else={() => <Loader2 className="animate-spin dark:text-white" />}>
+            <Show if={questionStore.loadingState !== 'loading'} else={() => <ActivityIndicator />}>
               <Button
                 onPress={() => questionStore.shuffle()}
-                className="w-[200px] hover:animate-pulse">
+                className="w-[200px] flex-row hover:animate-pulse">
                 <Text className="font-bold">Start</Text>
               </Button>
             </Show>

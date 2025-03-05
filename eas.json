@@ -6,6 +6,9 @@
   "build": {
     "development": {
       "developmentClient": true,
+      "ios": {
+        "simulator": true
+      },
       "distribution": "internal",
       "channel": "development"
     },
@@ -13,6 +16,13 @@
       "distribution": "internal",
       "ios": {
         "simulator": false
+      },
+      "channel": "preview"
+    },
+    "preview-simulator": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
       },
       "channel": "preview"
     },

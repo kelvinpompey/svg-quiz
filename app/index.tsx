@@ -9,6 +9,15 @@ import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+
+import {
+  getTrackingPermissionsAsync,
+  PermissionStatus,
+  requestTrackingPermissionsAsync,
+} from 'expo-tracking-transparency';
+import mobileAds from 'react-native-google-mobile-ads';
+import { useTrackingTransparency } from './useTrackingTransparency';
 
 function Home() {
   const router = useRouter();
@@ -31,6 +40,8 @@ function Home() {
   const handleViewResults = () => {
     router.push('/results');
   };
+
+  useTrackingTransparency();
 
   return (
     <SafeAreaView className="native:pt-8 relative flex flex-1 dark:bg-gray-900">

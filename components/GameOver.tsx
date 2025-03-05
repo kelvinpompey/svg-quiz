@@ -18,7 +18,7 @@ export const GameOver = observer(() => {
 
   return (
     <View className="gap-4 p-2">
-      <Text className="text-2xl text-white">
+      <Text className="text-2xl dark:text-white">
         Quiz completed in {timerStore.count} seconds with {questionStore.correctAnswerPercent}%
         accuracy.
       </Text>
